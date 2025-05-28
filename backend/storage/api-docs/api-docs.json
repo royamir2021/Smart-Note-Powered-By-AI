@@ -1,0 +1,1937 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "LMS API Documentation",
+        "description": "API documentation for LMS Smart Notebook project",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/auth/iframe-token": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Generate JWT token for LMS iframe",
+                "description": "Generate a JWT access token for a student to use in LMS iframe. Returns the token, expiration time (seconds), and issued timestamp.",
+                "operationId": "df550ce038c80424f2a893de34101f3c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "student_id",
+                                    "course_id",
+                                    "unit_number",
+                                    "lesson_title"
+                                ],
+                                "properties": {
+                                    "student_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "unit_number": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "lesson_title": {
+                                        "type": "string",
+                                        "example": "Introduction to JWT"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "JWT token and session info",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJK..."
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "example": 3600
+                                        },
+                                        "issued_at": {
+                                            "type": "integer",
+                                            "example": 1716200000
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/v1/flashcards/generate": {
+            "post": {
+                "tags": [
+                    "Flashcards"
+                ],
+                "summary": "Generate flashcards for a note using AI",
+                "description": "Generates up to 5 educational flashcards for the specified note using OpenAI. Requires authentication.",
+                "operationId": "4ebc92d554194bc6d144490611ff6698",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "note_id"
+                                ],
+                                "properties": {
+                                    "note_id": {
+                                        "description": "The ID of the note to generate flashcards for",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Flashcards created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Flashcards created successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "question": {
+                                                        "type": "string",
+                                                        "example": "What is photosynthesis?"
+                                                    },
+                                                    "answer": {
+                                                        "type": "string",
+                                                        "example": "It is the process by which plants make food using sunlight."
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error or AI response error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Note not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/flashcards/by-note": {
+            "post": {
+                "tags": [
+                    "Flashcards"
+                ],
+                "summary": "Get all flashcards for a note",
+                "description": "Fetches all flashcards related to a specific note. Requires authentication.",
+                "operationId": "83edf4507d5352197052f84a7ddb903f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "note_id"
+                                ],
+                                "properties": {
+                                    "note_id": {
+                                        "description": "ID of the note to fetch flashcards for",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Flashcards fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Flashcards fetched successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "note_id": {
+                                                        "type": "integer",
+                                                        "example": 23
+                                                    },
+                                                    "question": {
+                                                        "type": "string",
+                                                        "example": "What is photosynthesis?"
+                                                    },
+                                                    "answer": {
+                                                        "type": "string",
+                                                        "example": "It is the process by which plants make food using sunlight."
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/folders": {
+            "get": {
+                "tags": [
+                    "Folders"
+                ],
+                "summary": "Get folders for a student and course",
+                "description": "Returns a list of folders (with their notes) for a specific student and course.",
+                "operationId": "bf7fc98f332879e0350aac8480168599",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "query",
+                        "description": "Student ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "course_id",
+                        "in": "query",
+                        "description": "Course ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of folders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Biology"
+                                                    },
+                                                    "notes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 13
+                                                                },
+                                                                "title": {
+                                                                    "type": "string",
+                                                                    "example": "Photosynthesis"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Folders"
+                ],
+                "summary": "Create a new folder",
+                "operationId": "ad9f5be0a6a5dbfd5cd4dcb84ea8f87a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "New Folder"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Folder created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Folder created successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "New Folder"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/folders/{folder}/rename": {
+            "put": {
+                "tags": [
+                    "Folders"
+                ],
+                "summary": "Rename a folder",
+                "operationId": "762a88d29541e9c6b6f2f1521efae484",
+                "parameters": [
+                    {
+                        "name": "folder",
+                        "in": "path",
+                        "description": "Folder ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated Folder Name"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Folder renamed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Folder renamed successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Updated Folder Name"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/folders/{folder}": {
+            "delete": {
+                "tags": [
+                    "Folders"
+                ],
+                "summary": "Delete a folder",
+                "operationId": "fd29d9133d372b5adce4e00fe4a15ed5",
+                "parameters": [
+                    {
+                        "name": "folder",
+                        "in": "path",
+                        "description": "Folder ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Folder deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Folder deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Folder is not empty and cannot be deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Folder is not empty and cannot be deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/folders/move-note": {
+            "post": {
+                "tags": [
+                    "Folders"
+                ],
+                "summary": "Move a note to a folder",
+                "operationId": "65e255d0d4cb57275ceaf7d9ead64a33",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "note_id"
+                                ],
+                                "properties": {
+                                    "note_id": {
+                                        "type": "integer",
+                                        "example": 13
+                                    },
+                                    "folder_id": {
+                                        "type": "integer",
+                                        "example": 1,
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Note moved to folder successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Note moved to folder successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 13
+                                                },
+                                                "folder_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/upload-image": {
+            "post": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Upload an image for a note",
+                "description": "Uploads an image (jpeg, png, jpg, gif, svg, max 2MB) for a specific note and student. Returns the image URL on success.",
+                "operationId": "7db5815aaa3854b7575d9fc6e0404d7e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "image",
+                                    "note_id",
+                                    "student_id"
+                                ],
+                                "properties": {
+                                    "image": {
+                                        "description": "Image file (jpeg, png, jpg, gif, svg, max 2MB)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "note_id": {
+                                        "description": "ID of the note",
+                                        "type": "integer"
+                                    },
+                                    "student_id": {
+                                        "description": "ID of the student",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "url": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/uploads/student_1/note_1/note_1_20240101_120000.jpg"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/import/convert-to-html": {
+            "post": {
+                "tags": [
+                    "Import"
+                ],
+                "summary": "Convert a Word file to HTML (with images) and store assets by note/student",
+                "description": "Uploads a .doc/.docx file and note_id, converts it to HTML using LibreOffice, saves all images and HTML under structured folders, and returns the HTML.",
+                "operationId": "389652dc6c7be5eceb459a75c5920fd7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "file",
+                                    "note_id"
+                                ],
+                                "properties": {
+                                    "file": {
+                                        "description": "Word (.doc/.docx) file to convert",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "note_id": {
+                                        "description": "The ID of the note",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Conversion successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "html": {
+                                            "description": "HTML content of the converted Word file",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Conversion failed"
+                    }
+                }
+            }
+        },
+        "/api/v1/notes": {
+            "get": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Get list of notes filtered by student, course, unit, and lesson",
+                "operationId": "0eb12475438792d91075dbcb643f0184",
+                "parameters": [
+                    {
+                        "name": "student_id",
+                        "in": "query",
+                        "description": "Student ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "course_id",
+                        "in": "query",
+                        "description": "Course ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    },
+                    {
+                        "name": "unit_number",
+                        "in": "query",
+                        "description": "Unit number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 3
+                        }
+                    },
+                    {
+                        "name": "lesson_title",
+                        "in": "query",
+                        "description": "Lesson title",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Intro to JWT"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of notes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "List of notes"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "student_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "course_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "unit_number": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "lesson_title": {
+                                                        "type": "string",
+                                                        "example": "Intro to JWT"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "My Note"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Sample content here"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No notes found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No notes found"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Create a new note",
+                "operationId": "b156674541dd281cfa5e1eef5b81e762",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "My Note"
+                                    },
+                                    "content": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object"
+                                        },
+                                        "example": {
+                                            "type": "doc",
+                                            "content": []
+                                        }
+                                    },
+                                    "student_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "unit_number": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "lesson_title": {
+                                        "type": "string",
+                                        "example": "Intro to JWT"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Note created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Note created successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "student_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "course_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "unit_number": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "lesson_title": {
+                                                    "type": "string",
+                                                    "example": "Intro to JWT"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "My Note"
+                                                },
+                                                "content": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "type": "doc",
+                                                        "content": []
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notes/show/{note}": {
+            "get": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Get a note by its ID",
+                "operationId": "f9994b72edcc2d75ab858506bb2f221b",
+                "parameters": [
+                    {
+                        "name": "note",
+                        "in": "path",
+                        "description": "Note ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Note fetched successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "student_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "course_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "unit_number": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "lesson_title": {
+                                                    "type": "string",
+                                                    "example": "Intro to JWT"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "My Note"
+                                                },
+                                                "content": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "type": "doc",
+                                                        "content": []
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Note not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Note not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notes/{note}": {
+            "put": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Update a note by its ID",
+                "operationId": "36ce6f9253b773e27788a1ecb6aa4645",
+                "parameters": [
+                    {
+                        "name": "note",
+                        "in": "path",
+                        "description": "Note ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Updated Note Title"
+                                    },
+                                    "content": {
+                                        "example": "{}"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Note updated successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Delete a note by its ID",
+                "operationId": "98f04136407fb09cbd86682e2bbca42d",
+                "parameters": [
+                    {
+                        "name": "note",
+                        "in": "path",
+                        "description": "Note ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Note deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Note not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Note not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to delete note",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to delete note"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notes/get-or-create": {
+            "post": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Get or create a note based on student, course, unit, and lesson",
+                "operationId": "5ed79de006fa16071646016923380ec5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "student_id",
+                                    "course_id"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Sample Note"
+                                    },
+                                    "content": {
+                                        "example": {
+                                            "type": "doc",
+                                            "content": [
+                                                {
+                                                    "type": "paragraph"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "student_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "unit_number": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "lesson_title": {
+                                        "type": "string",
+                                        "example": "Intro to JWT"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reused empty note and updated timestamp & title.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Reused empty note and updated timestamp & title."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "student_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "course_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "unit_number": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "lesson_title": {
+                                                    "type": "string",
+                                                    "example": "Intro to JWT"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Sample Note"
+                                                },
+                                                "content": {
+                                                    "example": {
+                                                        "type": "doc",
+                                                        "content": [
+                                                            {
+                                                                "type": "paragraph"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created new note.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Previous note had content. Created new note."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "student_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "course_id": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "unit_number": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "lesson_title": {
+                                                    "type": "string",
+                                                    "example": "Intro to JWT"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Sample Note"
+                                                },
+                                                "content": {
+                                                    "example": {
+                                                        "type": "doc",
+                                                        "content": [
+                                                            {
+                                                                "type": "paragraph"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notes/filter-by-student-course": {
+            "post": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Get notes by student and course",
+                "operationId": "4a21e8813a4b0ea24bf1f2c6728aeaf9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "student_id",
+                                    "course_id"
+                                ],
+                                "properties": {
+                                    "student_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Filtered notes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Filtered notes"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "student_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "course_id": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    },
+                                                    "unit_number": {
+                                                        "type": "integer",
+                                                        "example": 3
+                                                    },
+                                                    "lesson_title": {
+                                                        "type": "string",
+                                                        "example": "Intro to JWT"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "My Note"
+                                                    },
+                                                    "content": {
+                                                        "example": {
+                                                            "type": "doc",
+                                                            "content": [
+                                                                {
+                                                                    "type": "paragraph"
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notes/{note}/export-pdf": {
+            "get": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Export note as PDF",
+                "description": "Exports the specified note as a PDF file and returns the PDF file for download.",
+                "operationId": "exportNotePdf",
+                "parameters": [
+                    {
+                        "name": "note",
+                        "in": "path",
+                        "description": "ID of the note to export",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "PDF file",
+                        "content": {
+                            "application/pdf": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Note not found"
+                    },
+                    "500": {
+                        "description": "Failed to generate PDF"
+                    }
+                }
+            }
+        },
+        "/api/v1/notes/{note}/export-word": {
+            "get": {
+                "tags": [
+                    "Notes"
+                ],
+                "summary": "Export note as Word",
+                "description": "Exports the specified note as a Word (.doc) file and returns the file for download.",
+                "operationId": "exportNoteWord",
+                "parameters": [
+                    {
+                        "name": "note",
+                        "in": "path",
+                        "description": "ID of the note to export",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Word file",
+                        "content": {
+                            "application/msword": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Note not found"
+                    },
+                    "500": {
+                        "description": "Failed to generate Word file"
+                    }
+                }
+            }
+        },
+        "/api/v1/quiz/generate": {
+            "post": {
+                "tags": [
+                    "Quizzes"
+                ],
+                "summary": "Generate multiple choice questions using AI",
+                "description": "Generates up to 4 multiple choice questions (MCQs) for the specified note using AI (OpenAI GPT). Requires authentication.",
+                "operationId": "24f622abcdebf610f6a85f23623f3662",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "note_id"
+                                ],
+                                "properties": {
+                                    "note_id": {
+                                        "description": "The ID of the note to generate quiz questions for",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Quiz generated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quiz generated successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "question": {
+                                                        "type": "string",
+                                                        "example": "What is the capital of France?"
+                                                    },
+                                                    "options": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Paris"
+                                                        }
+                                                    },
+                                                    "correct_index": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error or AI response error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Note not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quiz/by-note": {
+            "post": {
+                "tags": [
+                    "Quizzes"
+                ],
+                "summary": "Get quizzes by note ID",
+                "description": "Fetches all quiz questions related to a specific note. Requires authentication.",
+                "operationId": "0676a4933f4493e195f269cb43dccbcd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "note_id"
+                                ],
+                                "properties": {
+                                    "note_id": {
+                                        "description": "ID of the note to fetch quizzes for",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Quizzes fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quizzes fetched successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "note_id": {
+                                                        "type": "integer",
+                                                        "example": 12
+                                                    },
+                                                    "question": {
+                                                        "type": "string",
+                                                        "example": "What is photosynthesis?"
+                                                    },
+                                                    "options": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "A chemical process"
+                                                        }
+                                                    },
+                                                    "correct_index": {
+                                                        "type": "integer",
+                                                        "example": 2
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Note not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quiz/submit-exam": {
+            "put": {
+                "tags": [
+                    "Quizzes"
+                ],
+                "summary": "Submit or update a quiz result",
+                "description": "Submits or updates the quiz result (score) for a given note. Returns previous and current score.",
+                "operationId": "8c6bee2779fd497193a52f454d2d237c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "note_id",
+                                    "score"
+                                ],
+                                "properties": {
+                                    "note_id": {
+                                        "description": "Note ID",
+                                        "type": "integer"
+                                    },
+                                    "score": {
+                                        "description": "Score (0 to 100)",
+                                        "type": "integer",
+                                        "maximum": 100,
+                                        "minimum": 0
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Exam result saved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Exam result saved successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "note_id": {
+                                                    "type": "integer",
+                                                    "example": 23
+                                                },
+                                                "score": {
+                                                    "type": "integer",
+                                                    "example": 85
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "previous_score": {
+                                            "type": "integer",
+                                            "example": 70,
+                                            "nullable": true
+                                        },
+                                        "current_score": {
+                                            "type": "integer",
+                                            "example": 85
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "404": {
+                        "description": "Note not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Flashcards",
+            "description": "Flashcards"
+        },
+        {
+            "name": "Folders",
+            "description": "Folders"
+        },
+        {
+            "name": "Notes",
+            "description": "Notes"
+        },
+        {
+            "name": "Import",
+            "description": "Import"
+        },
+        {
+            "name": "Quizzes",
+            "description": "Quizzes"
+        }
+    ]
+}

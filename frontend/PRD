@@ -1,0 +1,81 @@
+Smart Note-Taking Widget – Product Requirement Document (PRD)
+1. Project Goal
+Create a secure iframe widget that lets students take notes inside the LMS. Each note should be connected to the student’s course, unit, and lesson.
+
+2. Key Features
+API to create and fetch notes
+
+Notes are auto-saved every few seconds
+
+JWT-based authentication for security
+
+Option to export notes to PDF or Word
+
+Generate flashcards and quizzes using AI
+
+3. API Requirements
+POST /api/notes
+Create a new note
+
+Input: student_id, course_id, unit_number, lesson_title
+
+Output: note_id, token, iframe URL
+
+POST /api/notes/{note_id}/save
+Save note content
+
+Input: content (as JSON), title
+
+Output: success message
+
+GET /api/notes/{note_id}
+Fetch a note
+
+Requires JWT token
+
+Output: full note content
+
+4. Data Structure
+notes table:
+
+id
+
+student_id
+
+course_id
+
+unit_number
+
+lesson_title
+
+title
+
+content (stored as JSON)
+
+created_at, updated_at
+
+5. User Flow
+The LMS sends student and course info to the API
+
+The backend responds with a signed iframe URL and token
+
+When the student opens the iframe, the note loads or a new one is created
+
+While typing, the content is auto-saved every few seconds
+
+When exporting or generating flashcards/quizzes, the content is sent to the AI API
+
+6. Security
+JWT tokens expire after 1 hour
+
+Tokens must match the correct student and session
+
+The iframe can only be embedded from the LMS domain (using Content-Security-Policy)
+
+7. Auto-Save Logic
+When the student stops typing, a request is sent after 2–3 seconds
+
+A PATCH request updates the note
+
+The UI shows the save status (e.g., “Saving...” or “Saved ✅”)
+

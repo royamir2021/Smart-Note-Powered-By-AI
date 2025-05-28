@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.ProseMirror {
+  outline: none;
+  min-height: 250px;
+  font-size: 1rem;
+  padding: 0.5rem;
+  @apply sm:min-h-[300px] md:min-h-[350px] lg:min-h-[400px];
+}
+
+.btn {
+  @apply px-2 py-1 rounded text-sm bg-gray-100 hover:bg-gray-200 border;
+  @apply sm:px-3 sm:py-2 md:px-4 md:py-2;
+}
+
+.tiptap {
+  outline: none;
+  user-select: text;
+  white-space: pre-wrap;
+  @apply sm:text-base md:text-lg;
+}
+
+img.resizable {
+  resize: both;
+  overflow: auto;
+  max-width: 100%;
+}
+
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Custom 3D utility classes for Tailwind */
+.perspective {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  @apply sm:pl-4 md:pl-6;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  @apply sm:pl-4 md:pl-6;
+}
+
+/* Responsive headings for editor */
+.ProseMirror h1 {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  @apply sm:text-2xl md:text-3xl lg:text-4xl;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  @apply sm:text-xl md:text-2xl lg:text-3xl;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  @apply sm:text-lg md:text-xl lg:text-2xl;
+}
+
+body {
+  font-family: Tahoma, sans-serif;
+  @apply sm:text-base md:text-lg lg:text-xl;
+}
+@keyframes spin-slow {
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
