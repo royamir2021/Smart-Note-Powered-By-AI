@@ -1,34 +1,34 @@
-# --- macOS and Windows system files & IDE configs ---
+
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
 
-# --- Laravel environment files (contains your API keys, database credentials, etc.) ---
+
 .env
 .env.*.backup
 
-# --- Dependency directories ---
+
 /backend/vendor/
 /frontend/node_modules/
 
-# --- Front-end production build output (will be generated on CI or locally) ---
+
 /frontend/build/
 /frontend/dist/
 
-# --- Laravel cache, logs and compiled files ---
+
 /backend/storage/app/
 /backend/storage/framework/
 /backend/storage/logs/
 /backend/bootstrap/cache/*.php
 
-# --- Docker Compose override files (local overrides you don’t want to commit) ---
+
 docker-compose.override.yml
 
-# --- Named Docker volume (if you created db_data on the host) ---
+
 db_data/
 
-# --- Optional: local debug logs from npm or yarn ---
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
