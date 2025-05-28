@@ -29,7 +29,6 @@ services:
     ports:
       - "8080:80"
     volumes:
-
       - ./frontend/dist:/usr/share/nginx/html
       - ./backend/public:/var/www/html/public
       - ./backend/storage/app/public:/var/www/html/public/storage
