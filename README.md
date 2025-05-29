@@ -137,7 +137,9 @@ smart-notebook/
 
 ```bash
 # Artisan shortcuts
+
 docker-compose exec backend php artisan key:generate
+docker-compose exec backend php composer install
 docker-compose exec backend php artisan jwt:secret
 docker-compose exec backend php artisan l5-swagger:generate
 ```
