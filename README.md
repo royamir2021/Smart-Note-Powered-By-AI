@@ -40,8 +40,8 @@ smart-notebook/
 1. **Clone & configure**
 
    ```bash
-   git clone https://github.com/<you>/smart-notebook.git
-   cd smart-notebook
+   git clone https://github.com/royamir2021/Smart-Note-Powered-By-AI.git
+   cd Smart-Note-Powered-By-AI
    cp backend/.env.example backend/.env
    # Set DB, JWT, MAIL and OPENAI keys in backend/.env
    ```
