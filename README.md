@@ -43,75 +43,14 @@ smart-notebook/
    git clone https://github.com/royamir2021/Smart-Note-Powered-By-AI.git
    cd Smart-Note-Powered-By-AI
    cp backend/.env.example backend/.env
+   cd backend
+   php artisan jwt:secret 
+   #to make your own JWT key
    # Set DB, JWT, MAIL and OPENAI keys in backend/.env
    ```
 
-2. **docker-compose.yml**
 
-   ```yaml
-   version: '3.8'
-
-   services:
-
-     db:
-       image: mysql:8.0
-       restart: always
-       environment:
-         MYSQL_DATABASE: notebook_db
-         MYSQL_USER: user
-         MYSQL_PASSWORD: password
-         MYSQL_ROOT_PASSWORD: rootpass
-       volumes:
-         - db_data:/var/lib/mysql
-       networks:
-         - app-network
-
-     backend:
-       build: ./backend
-       volumes:
-         - ./backend:/var/www/html
-       networks:
-         - app-network
-
-     nginx:
-       image: nginx:alpine
-       ports:
-         - "8080:80"
-       volumes:
-         - ./frontend/dist:/usr/share/nginx/html
-         - ./backend/public:/var/www/html/public
-         - ./backend/storage/app/public:/var/www/html/public/storage
-         - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-       depends_on:
-         - backend
-         - db
-       networks:
-         - app-network
-
-     phpmyadmin:
-       image: phpmyadmin/phpmyadmin:latest
-       restart: always
-       ports:
-         - "8081:80"
-       environment:
-         PMA_HOST: db
-         PMA_PORT: 3306
-         PMA_USER: user
-         PMA_PASSWORD: password
-       depends_on:
-         - db
-       networks:
-         - app-network
-
-   volumes:
-     db_data:
-
-   networks:
-     app-network:
-       driver: bridge
-   ```
-
-3. **Build & up containers**
+2. **Build & up containers**
 
    ```bash
    docker-compose up --build -d
@@ -137,11 +76,9 @@ smart-notebook/
 
 ```bash
 # Artisan shortcuts
-
-docker-compose exec backend php composer install
-docker-compose exec backend php artisan key:generate
-docker-compose exec backend php artisan jwt:secret
-docker-compose exec backend php artisan l5-swagger:generate
+to make sample data:
+docker-compose exec backend composer require --dev fakerphp/faker
+docker-compose exec backend php artisan db:seed
 ```
 
 ---
