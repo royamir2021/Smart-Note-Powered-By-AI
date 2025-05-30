@@ -278,7 +278,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of folders",
+                        "description": "List of folders with notes",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -322,10 +322,10 @@
                         }
                     },
                     "422": {
-                        "description": "Validation error"
+                        "description": "Validation error (e.g., missing or invalid student_id or course_id)"
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthorized (JWT or bearer token missing/invalid)"
                     }
                 },
                 "security": [
@@ -345,10 +345,23 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "name",
+                                    "student_id",
+                                    "course_id"
+                                ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
                                         "example": "New Folder"
+                                    },
+                                    "student_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 101
                                     }
                                 },
                                 "type": "object"
@@ -376,6 +389,14 @@
                                                 "name": {
                                                     "type": "string",
                                                     "example": "New Folder"
+                                                },
+                                                "student_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "course_id": {
+                                                    "type": "integer",
+                                                    "example": 101
                                                 }
                                             },
                                             "type": "object"
